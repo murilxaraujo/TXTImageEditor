@@ -7,6 +7,6 @@
 
 #import "CLImageToolBase.h"
 
-@interface CLDrawTool : CLImageToolBase
+@interface CLDrawTool : CLImageToolBase <UIGestureRecognizerDelegate>
 
 @end

@@ -64,6 +64,8 @@ static NSString* const kCLDrawToolEraserIconName = @"eraserIconAssetsName";
     
     UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(drawingViewDidPan:)];
     panGesture.maximumNumberOfTouches = 1;
+    panGesture.delaysTouchesBegan = false;
+    panGesture.delegate = self;
     
     _drawingView.userInteractionEnabled = YES;
     [_drawingView addGestureRecognizer:panGesture];
@@ -86,6 +88,11 @@ static NSString* const kCLDrawToolEraserIconName = @"eraserIconAssetsName";
                          self->_menuView.transform = CGAffineTransformIdentity;
                      }];
     
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
+    _prevDraggingPosition = [touch locationInView:_drawingView];
+    return TRUE;
 }
 
 - (void)cleanup
@@ -298,7 +305,8 @@ static NSString* const kCLDrawToolEraserIconName = @"eraserIconAssetsName";
     CGPoint currentDraggingPosition = [sender locationInView:_drawingView];
     
     if(sender.state == UIGestureRecognizerStateBegan){
-        _prevDraggingPosition = currentDraggingPosition;
+        
+       // _prevDraggingPosition = [sender locationInView:_drawingView];
     }
     
     if(sender.state != UIGestureRecognizerStateEnded){
